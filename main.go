@@ -102,9 +102,7 @@ func getServersDetails(dict map[string]string, token, orgToken string, servernam
       dict["vpn_ip"] = vpn_ip
 		}
     if strings.Contains(servername, "proxy") {
-      if ! strings.Contains(servername, "0") {
-        dict["ansible_ssh_common_args"] = "-o ProxyCommand=\"ssh -W %h:%p -q root@" + publicip + "\""
-      }
+      dict["ansible_ssh_common_args"] = "-o ProxyCommand=\"ssh -W %h:%p -q root@" + publicip + "\""
     }
 	}
 }

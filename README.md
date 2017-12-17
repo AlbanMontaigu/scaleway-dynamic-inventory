@@ -8,8 +8,9 @@ servers).
 
 ## Installation
 
+* Get the application: `go get github.com/chmod666org/scaleway-dynamic-inventory`
 * Go install this application: `go install github.com/chmod666org/scaleway-dynamic-inventory`
-* Create a new bash script and add the following to it: 
+* Create a new bash script and add the following to it:
 ```
 #!/bin/bash
 

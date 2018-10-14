@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	orgToken := os.Getenv("SCALEWAY_ORG_TOKEN")
+	orgToken := os.Getenv("SCALEWAY_ORGANIZATION")
 	token := os.Getenv("SCALEWAY_TOKEN")
 
 	if strings.TrimSpace(orgToken) == "" || strings.TrimSpace(token) == "" {

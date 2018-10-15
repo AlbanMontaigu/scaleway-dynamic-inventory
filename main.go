@@ -15,7 +15,7 @@ import (
 //
 // Global variables
 //
-var scwApi ScalewayAPI
+var scwApi api.ScalewayAPI
 
 //
 // Main function

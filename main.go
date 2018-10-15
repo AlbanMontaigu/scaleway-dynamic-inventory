@@ -145,7 +145,7 @@ func getServer(serverName string) map[string]string {
     }
 
     // Build the vpn_ip
-    lastDigit := string(server.Name[len(server.Name):])
+    lastDigit := string(server.Name[len(server.Name)-1:])
     //if _, err := strconv.Atoi(lastDigit); err == nil {
         switch {
             default:

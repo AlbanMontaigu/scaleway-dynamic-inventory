@@ -146,7 +146,7 @@ func getServer(serverName string) map[string]string {
 
     // Build the vpn_ip
     lastDigit := string(server.Name[0:])
-    if _, err := strconv.Atoi(lastDigit); err == nil {
+    //if _, err := strconv.Atoi(lastDigit); err == nil {
         switch {
             case strings.Contains(server.Name, "proxy"):
                 result["vpn_ip"] = "192.168.66.1" + lastDigit
@@ -158,7 +158,7 @@ func getServer(serverName string) map[string]string {
                 result["vpn_ip"] = "192.168.66.3" + lastDigit
                 break
         }
-    }
+    //}
     return result
 
 }

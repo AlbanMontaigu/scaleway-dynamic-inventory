@@ -8,12 +8,12 @@ servers).
 
 ## Installation
 
-* Get the application: `go get github.com/chmod666org/scaleway-dynamic-inventory`
-* Go install this application: `go install github.com/chmod666org/scaleway-dynamic-inventory`
+* Get the application: `go get -u github.com/AlbanMontaigu/scaleway-dynamic-inventory`
+* Go install this application: `go install github.com/AlbanMontaigu/scaleway-dynamic-inventory`
 * Create a new bash script and add the following to it:
 ```
 #!/bin/bash
 
-SCALEWAY_ORG_TOKEN='' SCALEWAY_TOKEN='' scaleway-dynamic-inventory
+SCALEWAY_ORGANIZATION='' SCALEWAY_TOKEN='' scaleway-dynamic-inventory
 ```
 * Call your Ansible playbook, passing in the bash script created in step 2 to the -i parameter: `ansible-playbook play.yml -i scaleway-dynamic-inventory.sh`

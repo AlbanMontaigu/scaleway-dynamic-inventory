@@ -56,7 +56,6 @@ func main() {
 
 }
 
-
 //
 // Initialize the common scaleway API object
 //

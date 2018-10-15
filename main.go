@@ -90,7 +90,7 @@ func getServers() map[string][]string {
     // API call
     servers, err := scwApi.GetServers(true, 0)
     if err != nil {
-        panic(fmt.Sprintf("Failed to get servers: %s", err))
+        panic("Failed to get servers")
     }
 
     // Prepare result
@@ -116,11 +116,11 @@ func getScWServerByName(serverName string) *types.ScalewayServer {
     // API call
     serverId, err := scwApi.GetServerID(serverName)
     if err != nil {
-        panic(fmt.Sprintf("Failed to get server id with name: %s", err))
+        panic(fmt.Sprintf("Failed to get server id with name: %s", serverName))
     }
     server, err := scwApi.GetServer(serverId)
     if err != nil {
-        panic(fmt.Sprintf("Failed to get server with id: %s", err))
+        panic(fmt.Sprintf("Failed to get server with id: %s", serverId))
     }
     return server
 }

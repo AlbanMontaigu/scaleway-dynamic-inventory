@@ -90,6 +90,7 @@ func getServersDetails(dict map[string]string, token, orgToken string, servernam
     count++ 
     if server.Name == "proxy0" {
       publicip = server.PublicAddress.IP
+      dict["proxy_inet"] = "True"
     }
     if server.Name == servername {
       if server.PublicAddress.IP != "" {

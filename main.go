@@ -10,6 +10,7 @@ import (
     "strings"
     "strconv"
     "github.com/scaleway/go-scaleway"
+    "github.com/scaleway/go-scaleway/logger"
 )
 
 //

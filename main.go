@@ -72,7 +72,7 @@ func initScwApi () {
 
     // Init api object
     disabledLoggerFunc := func(a *api.ScalewayAPI) {
-        a.Logger = api.logger.NewDisableLogger()
+        a.Logger = logger.NewDisableLogger()
     }
     api, err := api.NewScalewayAPI(scwOrga, scwToken, "Scaleway Dynamic Inventory", "", disabledLoggerFunc)
     if err != nil {

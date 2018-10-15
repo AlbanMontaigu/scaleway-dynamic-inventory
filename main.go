@@ -133,6 +133,7 @@ func getServer(serverName string) map[string]string {
     // Build specific result for proxy0
     if server.Name == "proxy0" {
         result["proxy_inet"] = "True"
+    } else {
         result["ansible_ssh_common_args"] = "-o ProxyCommand=\"ssh -W %h:%p -q root@" + server.PublicAddress.IP + " -i ~/.ssh/scaleway.pem\""
     }
 

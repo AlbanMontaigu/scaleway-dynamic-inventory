@@ -104,5 +104,6 @@ func getServersDetails(dict map[string]string, token, orgToken string, servernam
     if ! strings.Contains(servername, "proxy0") {
       dict["ansible_ssh_common_args"] = "-o ProxyCommand=\"ssh -W %h:%p -q root@" + publicip + " -i ~/.ssh/scaleway.pem\""
     }
+    dict["ansible_python_interpreter"] = "/usr/bin/python3"
 	}
 }

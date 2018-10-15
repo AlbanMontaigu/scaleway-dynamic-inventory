@@ -42,18 +42,18 @@ func main() {
     // Get server details
     case "--host":
         if os.Args[2] == "" {
-            panic("Hostname is required (--host <hostname>)")
+            fmt.Println("Hostname is required (--host <hostname>)")
+            os.Exit(1)
         }
         jsonResponse, err = json.Marshal(getServer(os.Args[2]))
     }
 
-        
     // Cherck result and displays it if any
     if err != nil {
-        panic("Failed to marshal the dynamic inventory")
+        fmt.Printf("Failed to marshal the dynamic inventory (%s)", err)
+        os.Exit(1)
     }
     fmt.Println(string(jsonResponse))
-
 }
 
 //
@@ -64,11 +64,13 @@ func initScwApi () {
     // Get and control scaleway tokens
     scwOrga := strings.TrimSpace(os.Getenv("SCALEWAY_ORGANIZATION"))
     if strings.TrimSpace(scwOrga) == ""  {
-        panic("Required SCALEWAY_ORGANIZATION env var is not set")
+        fmt.Println("Required SCALEWAY_ORGANIZATION env var is not set")
+        os.Exit(1)
     }
     scwToken := strings.TrimSpace(os.Getenv("SCALEWAY_TOKEN"))
     if strings.TrimSpace(scwToken) == "" {
-        panic("Required SCALEWAY_TOKEN env var is not set")
+        fmt.Println("Required SCALEWAY_TOKEN env var is not set")
+        os.Exit(1)
     }
 
     // Init api object
@@ -77,7 +79,8 @@ func initScwApi () {
     }
     api, err := api.NewScalewayAPI(scwOrga, scwToken, "Scaleway Dynamic Inventory", "", disabledLoggerFunc)
     if err != nil {
-        panic("Failed to create scaleway API instance")
+        fmt.Printf("Failed to create scaleway API instance: %s\n", err)
+        os.Exit(1)
     }
     scwApi = *api
 }
@@ -90,7 +93,8 @@ func getServers() map[string][]string {
     // API call
     servers, err := scwApi.GetServers(true, 0)
     if err != nil {
-        panic("Failed to get servers")
+        fmt.Printf("Failed to get servers: %s\n", err)
+        os.Exit(1)
     }
 
     // Prepare result
@@ -116,11 +120,13 @@ func getScWServerByName(serverName string) *types.ScalewayServer {
     // API call
     serverId, err := scwApi.GetServerID(serverName)
     if err != nil {
-        panic(fmt.Sprintf("Failed to get server id with name: %s", serverName))
+        fmt.Printf("Failed to get server id with name: %s\n", err)
+        os.Exit(1)
     }
     server, err := scwApi.GetServer(serverId)
     if err != nil {
-        panic(fmt.Sprintf("Failed to get server with id: %s", serverId))
+        fmt.Printf("Failed to get server with id: %s\n", err)
+        os.Exit(1)
     }
     return server
 }

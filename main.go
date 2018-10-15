@@ -8,7 +8,7 @@ import (
     "fmt"
     "os"
     "strings"
-//    "strconv"
+    "strconv"
     "github.com/scaleway/go-scaleway"
     "github.com/scaleway/go-scaleway/logger"
 )
@@ -145,22 +145,23 @@ func getServer(serverName string) map[string]string {
     }
 
     // Build the vpn_ip
-    lastDigit := string(server.Name[len(server.Name)-1:])
-    //if _, err := strconv.Atoi(lastDigit); err == nil {
-        switch {
-            default:
-                result["vpn_ip"] = lastDigit
-            case strings.Contains(server.Name, "proxy"):
-                result["vpn_ip"] = "192.168.66.1" + lastDigit
-                break
-            case strings.Contains(server.Name, "master"):
-                result["vpn_ip"] = "192.168.66.2" + lastDigit
-                break
-            case strings.Contains(server.Name, "worker"):
-                result["vpn_ip"] = "192.168.66.3" + lastDigit
-                break
+    digitPos := len(server.Name)-1
+    if digitPos > 1 {
+        lastDigit := string(server.Name[digitPos:])
+        if _, err := strconv.Atoi(lastDigit); err == nil {
+            switch {
+                case strings.Contains(server.Name, "proxy"):
+                    result["vpn_ip"] = "192.168.66.1" + lastDigit
+                    break
+                case strings.Contains(server.Name, "master"):
+                    result["vpn_ip"] = "192.168.66.2" + lastDigit
+                    break
+                case strings.Contains(server.Name, "worker"):
+                    result["vpn_ip"] = "192.168.66.3" + lastDigit
+                    break
+            }
         }
-    //}
+    }
     return result
 
 }

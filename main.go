@@ -71,10 +71,7 @@ func initScwApi () {
     }
 
     // Init api object
-    disabledLoggerFunc := func(a *api.ScalewayAPI) {
-        a.Logger = api.NewDisableLogger()
-    }
-    api, err := api.NewScalewayAPI(scwOrga, scwToken, "Scaleway Dynamic Inventory", "", disabledLoggerFunc)
+    api, err := api.NewScalewayAPI(scwOrga, scwToken, "Scaleway Dynamic Inventory", "")
     if err != nil {
         panic(fmt.Sprintf("Failed to create scaleway API instance: %s", err))
     }

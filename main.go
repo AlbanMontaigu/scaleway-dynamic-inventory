@@ -132,7 +132,7 @@ func getScWServerByName(serverName string) *types.ScalewayServer {
 func getServer(serverName string) map[string]string {
 
     // Prepare targeted server
-    var server types.ScalewayServer
+    var server *types.ScalewayServer
 
     // Prepare result
     result := make(map[string]string)

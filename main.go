@@ -9,7 +9,7 @@ import (
     "os"
     "strings"
     "strconv"
-    "github.com/scaleway/go-scaleway"
+    "github.com/scaleway/scaleway-cli/pkg/api"
 )
 
 //
@@ -60,7 +60,7 @@ func main() {
 //
 // Initialize the common scaleway API object
 //
-func initScwApi () *ScalewayAPI {
+func initScwApi () {
 
     // Get and control scaleway tokens
     scwOrga := strings.TrimSpace(os.Getenv("SCALEWAY_ORGANIZATION"))

@@ -114,7 +114,7 @@ func getServers() map[string][]string {
 func getServer(serverName string) map[string]string {
 
     // API call
-    serverId, err := scwApi.GetServer(serverName)
+    serverId, err := scwApi.GetServerID(serverName)
     if err != nil {
         panic(fmt.Sprintf("Failed to get server id with name: %s", err))
     }

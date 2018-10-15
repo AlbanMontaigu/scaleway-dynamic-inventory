@@ -8,7 +8,7 @@ import (
     "fmt"
     "os"
     "strings"
-    "strconv"
+//    "strconv"
     "github.com/scaleway/go-scaleway"
     "github.com/scaleway/go-scaleway/logger"
 )
@@ -148,6 +148,8 @@ func getServer(serverName string) map[string]string {
     lastDigit := string(server.Name[0:])
     //if _, err := strconv.Atoi(lastDigit); err == nil {
         switch {
+            default:
+                result["vpn_ip"] = lastDigit
             case strings.Contains(server.Name, "proxy"):
                 result["vpn_ip"] = "192.168.66.1" + lastDigit
                 break

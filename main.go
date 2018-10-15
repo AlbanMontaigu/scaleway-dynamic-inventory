@@ -11,6 +11,7 @@ import (
     "strconv"
     "github.com/scaleway/go-scaleway"
     "github.com/scaleway/go-scaleway/logger"
+    "github.com/scaleway/go-scaleway/types"
 )
 
 //
@@ -109,9 +110,9 @@ func getServers() map[string][]string {
 }
 
 //
-// Get server details (with --host flag)
+// Get server by name (scw whants id)
 //
-func getServer(serverName string) map[string]string {
+func getScWServerByName(serverName string) *types.ScalewayServer {
 
     // API call
     serverId, err := scwApi.GetServerID(serverName)
@@ -122,6 +123,16 @@ func getServer(serverName string) map[string]string {
     if err != nil {
         panic(fmt.Sprintf("Failed to get server with id: %s", err))
     }
+    return server
+}
+
+//
+// Get server details (with --host flag)
+//
+func getServer(serverName string) map[string]string {
+
+    // Prepare targeted server
+    var server types.ScalewayServer
 
     // Prepare result
     result := make(map[string]string)
@@ -130,11 +141,16 @@ func getServer(serverName string) map[string]string {
     result["ansible_python_interpreter"] = "/usr/bin/python3"
     result["ansible_user"] = "root"
 
+    // Get proxy0 public ip for gateway
+    serverProxy0 := getScWServerByName("proxy0")
+
     // Build specific result for proxy0
-    if server.Name == "proxy0" {
+    if serverName == "proxy0" {
+        server = *serverProxy0
         result["proxy_inet"] = "True"
     } else {
-        result["ansible_ssh_common_args"] = "-o ProxyCommand=\"ssh -W %h:%p -q root@" + server.PublicAddress.IP + " -i ~/.ssh/scaleway.pem\""
+        server = getScWServerByName(serverName)
+        result["ansible_ssh_common_args"] = "-o ProxyCommand=\"ssh -W %h:%p -q root@" + serverProxy0.PublicAddress.IP + " -i ~/.ssh/scaleway.pem\""
     }
 
     // Build ansible hosts and takes care about public / private ip

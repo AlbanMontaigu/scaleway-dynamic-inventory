@@ -146,7 +146,7 @@ func getServer(serverName string) map[string]string {
 
     // Build specific result for proxy0
     if serverName == "proxy0" {
-        server = *serverProxy0
+        server = serverProxy0
         result["proxy_inet"] = "True"
     } else {
         server = getScWServerByName(serverName)

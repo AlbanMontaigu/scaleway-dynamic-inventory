@@ -9,7 +9,7 @@ import (
     "os"
     "strings"
     "strconv"
-    "github.com/scaleway/scaleway-cli/pkg/api"
+    "github.com/scaleway/go-scaleway"
 )
 
 //

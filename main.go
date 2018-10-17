@@ -39,7 +39,7 @@ func main() {
 
     // Handling default value
     osArg1 := ""
-    if len(os.Args) >= 1 {
+    if len(os.Args) > 1 {
         osArg1 = os.Args[1]
     }
 

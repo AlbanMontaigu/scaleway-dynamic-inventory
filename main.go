@@ -19,7 +19,7 @@ import (
 //
 var (
     scwApi api.ScalewayAPI
-    log = log.New(os.Stderr, "", 0)
+    l = log.New(os.Stderr, "", 0)
 )
 
 //
@@ -56,20 +56,20 @@ func main() {
     // Get server details
     case "--host":
         if len(os.Args) < 2  {
-            log.Printf("%s hostname is required (--host <hostname>)", MSG_PREFIX)
+            l.Printf("%s hostname is required (--host <hostname>)", MSG_PREFIX)
             os.Exit(1)
         }
         jsonResponse, err = json.Marshal(getServer(os.Args[2]))
         
     // No arg so do nothing exit directly
     default:
-        log.Printf("%s usage: [--host|--list]", MSG_PREFIX)
+        l.Printf("%s usage: [--host|--list]", MSG_PREFIX)
         os.Exit(1)
     }
 
     // Cherck result and displays it if any
     if err != nil {
-        log.Printf("%s failed to marshal the dynamic inventory: %s", MSG_PREFIX, err)
+        l.Printf("%s failed to marshal the dynamic inventory: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
     fmt.Println(string(jsonResponse))
@@ -83,22 +83,22 @@ func initScwApi () {
     // Get and control scaleway tokens
     scwOrga := strings.TrimSpace(os.Getenv("SCALEWAY_ORGANIZATION"))
     if strings.TrimSpace(scwOrga) == ""  {
-        log.Printf("%s required SCALEWAY_ORGANIZATION env var is not set", MSG_PREFIX)
+        l.Printf("%s required SCALEWAY_ORGANIZATION env var is not set", MSG_PREFIX)
         os.Exit(1)
     }
     scwToken := strings.TrimSpace(os.Getenv("SCALEWAY_TOKEN"))
     if strings.TrimSpace(scwToken) == "" {
-        log.Printf("%s required SCALEWAY_TOKEN env var is not set", MSG_PREFIX)
+        l.Printf("%s required SCALEWAY_TOKEN env var is not set", MSG_PREFIX)
         os.Exit(1)
     }
 
     // Init api object
     disabledLoggerFunc := func(a *api.ScalewayAPI) {
-        a.Logger = logger.NewDisableLogger()
+        a.Logger = lger.NewDisableLogger()
     }
     api, err := api.NewScalewayAPI(scwOrga, scwToken, "Scaleway Dynamic Inventory", "", disabledLoggerFunc)
     if err != nil {
-        log.Printf("%s failed to create scaleway API instance: %s", MSG_PREFIX, err)
+        l.Printf("%s failed to create scaleway API instance: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
     scwApi = *api
@@ -112,7 +112,7 @@ func getServers() map[string][]string {
     // API call
     servers, err := scwApi.GetServers(true, 0)
     if err != nil {
-        log.Printf("%s failed to get servers: %s", MSG_PREFIX, err)
+        l.Printf("%s failed to get servers: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
 
@@ -139,12 +139,12 @@ func getScWServerByName(serverName string) *types.ScalewayServer {
     // API call
     serverId, err := scwApi.GetServerID(serverName)
     if err != nil {
-        log.Printf("%s failed to get server id with name: %s", MSG_PREFIX, err)
+        l.Printf("%s failed to get server id with name: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
     server, err := scwApi.GetServer(serverId)
     if err != nil {
-        log.Printf("%s failed to get server with id: %s", MSG_PREFIX, err)
+        l.Printf("%s failed to get server with id: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
     return server

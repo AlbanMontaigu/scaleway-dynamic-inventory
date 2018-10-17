@@ -37,8 +37,14 @@ func main() {
     var jsonResponse []byte
     var err error
 
+    // Handling default value
+    osArg1 := ""
+    if len(os.Args) >= 1 {
+        osArg1 = os.Args[1]
+    }
+
     // Process depending the flags
-    switch os.Args[1] {
+    switch osArg1 {
     
     // Get server list
     default:
@@ -47,7 +53,7 @@ func main() {
     
     // Get server details
     case "--host":
-        if os.Args[2] == "" {
+        if len(os.Args) < 2  {
             fmt.Printf("%s hostname is required (--host <hostname>)\n", MSG_PREFIX)
             os.Exit(1)
         }

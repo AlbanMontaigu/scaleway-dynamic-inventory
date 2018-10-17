@@ -125,7 +125,7 @@ func getServers() map[string][]string {
     for _, server := range *servers {
 
         // Servers to filter / skip in the loop
-        if (regexp.MatchString("proxy[0-9]|master[[0-9]|worker+[0-9]")) {
+        if (regexp.MatchString("proxy[0-9]|master[[0-9]|worker+[0-9]", serverName)) {
             continue
         }
 
@@ -165,7 +165,7 @@ func getScWServerByName(serverName string) *types.ScalewayServer {
 func getServer(serverName string) map[string]string {
 
     // Servers to filter / skip in the loop
-    if (regexp.MatchString("proxy[0-9]|master[[0-9]|worker+[0-9]")) {
+    if (regexp.MatchString("proxy[0-9]|master[[0-9]|worker+[0-9]", serverName)) {
         l.Printf("%s server name allowed regexp: proxy[0-9]|master[[0-9]|worker+[0-9]", MSG_PREFIX, err)
         os.Exit(1)
     }

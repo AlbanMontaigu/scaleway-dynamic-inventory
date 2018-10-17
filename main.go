@@ -9,6 +9,7 @@ import (
     "os"
     "strings"
     "strconv"
+    "log"
     "github.com/scaleway/go-scaleway"
     "github.com/scaleway/go-scaleway/logger"
     "github.com/scaleway/go-scaleway/types"
@@ -94,7 +95,7 @@ func initScwApi () {
 
     // Init api object
     disabledLoggerFunc := func(a *api.ScalewayAPI) {
-        a.Logger = lger.NewDisableLogger()
+        a.Logger = logger.NewDisableLogger()
     }
     api, err := api.NewScalewayAPI(scwOrga, scwToken, "Scaleway Dynamic Inventory", "", disabledLoggerFunc)
     if err != nil {

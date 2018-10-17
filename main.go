@@ -9,6 +9,7 @@ import (
     "os"
     "strings"
     "strconv"
+    "regexp"
     "log"
     "github.com/scaleway/go-scaleway"
     "github.com/scaleway/go-scaleway/logger"
@@ -122,6 +123,13 @@ func getServers() map[string][]string {
 
     // Build result
     for _, server := range *servers {
+
+        // Servers to filter / skip in the loop
+        if (regexp.MatchString("proxy[0-9]|master[[0-9]|worker+[0-9]")) {
+            continue
+        }
+
+        // Servers not filtered, adding it to the result
         for _, tag := range server.Tags {
             if _, ok := result[tag]; !ok {
                 result[tag] = make([]string, 0)
@@ -155,6 +163,12 @@ func getScWServerByName(serverName string) *types.ScalewayServer {
 // Get server details (with --host flag)
 //
 func getServer(serverName string) map[string]string {
+
+    // Servers to filter / skip in the loop
+    if (regexp.MatchString("proxy[0-9]|master[[0-9]|worker+[0-9]")) {
+        l.Printf("%s server name allowed regexp: proxy[0-9]|master[[0-9]|worker+[0-9]", MSG_PREFIX, err)
+        os.Exit(1)
+    }
 
     // Prepare targeted server
     var server *types.ScalewayServer

@@ -38,7 +38,7 @@ func main() {
     var err error
 
     // Handling default value
-    osArg1 := ""
+    osArg1 := "--list"
     if len(os.Args) > 1 {
         osArg1 = os.Args[1]
     }
@@ -50,6 +50,7 @@ func main() {
     default:
     case "--list":
         jsonResponse, err = json.Marshal(getServers())
+        break
     
     // Get server details
     case "--host":
@@ -58,6 +59,7 @@ func main() {
             os.Exit(1)
         }
         jsonResponse, err = json.Marshal(getServer(os.Args[2]))
+        break
     }
 
     // Cherck result and displays it if any

@@ -185,13 +185,16 @@ func getServer(serverName string) map[string]string {
     // Get proxy0 public ip for gateway
     serverProxy0 := getScWServerByName("proxy0")
 
+    // Common proxy conf
+    result["ansible_ssh_common_args"] = "-q -C -o ControlMaster=auto -o ControlPersist=5m -o ForwardAgent=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
     // Build specific result for proxy0
     if serverName == "proxy0" {
         server = serverProxy0
         result["proxy_inet"] = "True"
     } else {
         server = getScWServerByName(serverName)
-        result["ansible_ssh_common_args"] = "-q -o ProxyCommand=\"ssh -W %h:%p -q root@" + serverProxy0.PublicAddress.IP + " -i ~/.ssh/scaleway.pem\""
+        result["ansible_ssh_common_args"] = append(result["ansible_ssh_common_args"], " -o ProxyCommand=\"ssh -W %h:%p -q root@" + serverProxy0.PublicAddress.IP + " -i ~/.ssh/scaleway.pem\"")
     }
 
     // Build ansible hosts and takes care about public / private ip

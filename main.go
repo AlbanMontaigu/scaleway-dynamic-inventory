@@ -27,7 +27,10 @@ var (
 //
 // Global constants
 //
-const MSG_PREFIX = "scw-inv:"
+const (
+    MSG_PREFIX = "scw-inv:"
+    ALLOWED_SERVER_NAME = regexp.MustCompile("proxy[0-9]|master[[0-9]|worker+[0-9]")
+)
 
 
 //
@@ -125,7 +128,7 @@ func getServers() map[string][]string {
     for _, server := range *servers {
 
         // Servers to filter / skip in the loop
-        if (regexp.MatchString("proxy[0-9]|master[[0-9]|worker+[0-9]", serverName)) {
+        if (!ALLOWED_SERVER_NAME.MatchString(serverName)) {
             continue
         }
 
@@ -165,8 +168,8 @@ func getScWServerByName(serverName string) *types.ScalewayServer {
 func getServer(serverName string) map[string]string {
 
     // Servers to filter / skip in the loop
-    if (regexp.MatchString("proxy[0-9]|master[[0-9]|worker+[0-9]", serverName)) {
-        l.Printf("%s server name allowed regexp: proxy[0-9]|master[[0-9]|worker+[0-9]", MSG_PREFIX, err)
+    if (!ALLOWED_SERVER_NAME.MatchString(serverName)) {
+        l.Printf("%s server name allowed regexp: %s", MSG_PREFIX, ALLOWED_SERVER_NAME.String())
         os.Exit(1)
     }
 

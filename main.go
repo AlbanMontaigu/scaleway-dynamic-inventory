@@ -127,7 +127,7 @@ func getServers() map[string][]string {
     for _, server := range *servers {
 
         // Servers to filter / skip in the loop
-        if (!allowedServerName.MatchString(serverName)) {
+        if (!allowedServerName.MatchString(server.Name)) {
             continue
         }
 

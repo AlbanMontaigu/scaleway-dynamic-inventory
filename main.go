@@ -17,7 +17,10 @@ import (
 //
 // Global variables
 //
-var scwApi api.ScalewayAPI
+var (
+    scwApi api.ScalewayAPI
+    log = log.New(os.Stderr, "", 0)
+)
 
 //
 // Global constants
@@ -47,24 +50,26 @@ func main() {
     switch osArg1 {
     
     // Get server list
-    default:
     case "--list":
         jsonResponse, err = json.Marshal(getServers())
-        break
-    
+            
     // Get server details
     case "--host":
         if len(os.Args) < 2  {
-            fmt.Printf("%s hostname is required (--host <hostname>)\n", MSG_PREFIX)
+            log.Printf("%s hostname is required (--host <hostname>)", MSG_PREFIX)
             os.Exit(1)
         }
         jsonResponse, err = json.Marshal(getServer(os.Args[2]))
-        break
+        
+    // No arg so do nothing exit directly
+    default:
+        log.Printf("%s usage: [--host|--list]", MSG_PREFIX)
+        os.Exit(1)
     }
 
     // Cherck result and displays it if any
     if err != nil {
-        fmt.Printf("%s failed to marshal the dynamic inventory: %s\n", MSG_PREFIX, err)
+        log.Printf("%s failed to marshal the dynamic inventory: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
     fmt.Println(string(jsonResponse))
@@ -78,12 +83,12 @@ func initScwApi () {
     // Get and control scaleway tokens
     scwOrga := strings.TrimSpace(os.Getenv("SCALEWAY_ORGANIZATION"))
     if strings.TrimSpace(scwOrga) == ""  {
-        fmt.Printf("%s required SCALEWAY_ORGANIZATION env var is not set\n", MSG_PREFIX)
+        log.Printf("%s required SCALEWAY_ORGANIZATION env var is not set", MSG_PREFIX)
         os.Exit(1)
     }
     scwToken := strings.TrimSpace(os.Getenv("SCALEWAY_TOKEN"))
     if strings.TrimSpace(scwToken) == "" {
-        fmt.Printf("%s required SCALEWAY_TOKEN env var is not set\n", MSG_PREFIX)
+        log.Printf("%s required SCALEWAY_TOKEN env var is not set", MSG_PREFIX)
         os.Exit(1)
     }
 
@@ -93,7 +98,7 @@ func initScwApi () {
     }
     api, err := api.NewScalewayAPI(scwOrga, scwToken, "Scaleway Dynamic Inventory", "", disabledLoggerFunc)
     if err != nil {
-        fmt.Printf("%s failed to create scaleway API instance: %s\n", MSG_PREFIX, err)
+        log.Printf("%s failed to create scaleway API instance: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
     scwApi = *api
@@ -107,7 +112,7 @@ func getServers() map[string][]string {
     // API call
     servers, err := scwApi.GetServers(true, 0)
     if err != nil {
-        fmt.Printf("%s failed to get servers: %s\n", MSG_PREFIX, err)
+        log.Printf("%s failed to get servers: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
 
@@ -134,12 +139,12 @@ func getScWServerByName(serverName string) *types.ScalewayServer {
     // API call
     serverId, err := scwApi.GetServerID(serverName)
     if err != nil {
-        fmt.Printf("%s failed to get server id with name: %s\n", MSG_PREFIX, err)
+        log.Printf("%s failed to get server id with name: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
     server, err := scwApi.GetServer(serverId)
     if err != nil {
-        fmt.Printf("%s failed to get server with id: %s\n", MSG_PREFIX, err)
+        log.Printf("%s failed to get server with id: %s", MSG_PREFIX, err)
         os.Exit(1)
     }
     return server
@@ -187,13 +192,13 @@ func getServer(serverName string) map[string]string {
             switch {
                 case strings.Contains(server.Name, "proxy"):
                     result["vpn_ip"] = "192.168.66.1" + lastDigit
-                    break
+                    
                 case strings.Contains(server.Name, "master"):
                     result["vpn_ip"] = "192.168.66.2" + lastDigit
-                    break
+                    
                 case strings.Contains(server.Name, "worker"):
                     result["vpn_ip"] = "192.168.66.3" + lastDigit
-                    break
+                    
             }
         }
     }
